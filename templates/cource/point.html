@@ -1,0 +1,42 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h2> {{cource.name}} </h2>
+</div>
+
+<div style='margin-left:50px; margin-top:50px'>
+    <ul class="nav nav-pills">
+     <li class="nav-item">
+       <a class="nav-link {{nav1}}" href="{{cource.get_stream_url}}">Лента</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav2}}" href="{{cource.get_tasks_url}}">Задания</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav3}}" href="{{cource.users_url}}">Пользователи</a>
+     </li>
+     <li class="nav-item">
+         <a class="nav-link {{nav4}}" href="{{cource.points_url}}">Оценки</a>
+       </li>
+   </ul>
+ </div>
+
+<div class="card" style="margin:50px">
+   {% for task in tasks %}
+   {% if task.points %}
+   <div class="card-body">
+     <a href="{{task.task_points_url}}">{{task.name}}</a> 
+     {% if task.deadline %}
+     <p style="font-size:12px">Срок здачи: {{task.deadline}}</p>
+      {% else %}
+      <p style="font-size:12px">Без срока здачи</p>
+     {% endif %}
+   </div>
+   {% endif %}
+   {% endfor %}
+</div>
+
+{% endblock content%}

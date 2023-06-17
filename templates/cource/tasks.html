@@ -1,0 +1,86 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h2> {{cource.name}} </h2>
+</div>
+
+<div style='margin-left:50px; margin-top:50px'>
+    <ul class="nav nav-pills">
+     <li class="nav-item">
+       <a class="nav-link {{nav1}}" href="{{cource.get_stream_url}}">Лента</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav2}}" href="{{cource.get_tasks_url}}">Задания</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav3}}" href="{{cource.users_url}}">Пользователи</a>
+     </li>
+     {% if user in cource.teachers.all %}
+     <li class="nav-item">
+         <a class="nav-link {{nav4}}" href="{{cource.points_url}}">Оценки</a>
+       </li>
+       {%endif%}
+   </ul>
+ </div>
+ {% if user in cource.teachers.all %}
+<div style="margin:30px">
+ <a href="{{cource.add_task_url}}"> Добавить задание </a>
+</div>
+{% endif %}
+
+<div class="card" style="margin:50px">
+   {% for task in tasks %}
+   <div class="card-body">
+    {% if not task.theme %}
+     <a href="{{task.get_task_url}}">{{task.name}}</a> 
+     {% if user in cource.students.all %}
+     {% for file in files %}
+     {% if file.task == task %}
+     <p style="font-size:12px">Сдано</p>
+     {% else %}
+     <p style="font-size:12px">Назначено</p>
+     {% endif %}
+     {% endfor %}
+     {% endif %}
+     {% if task.deadline %}
+     <p style="font-size:12px">Срок здачи: {{task.deadline}}</p>
+      {% else %}
+      <p style="font-size:12px">Без срока здачи</p>
+     {% endif %}
+     {% endif %}
+   </div>
+   {% endfor %}
+</div>
+
+  <div class="card" style="margin:50px">
+    {% for theme in themes %}
+    <div class="card-body">
+      <h2>{{ theme.name }}</h2>
+    </div>
+    {% for task in tasks %}
+   <div class="card-body">
+    {% if task.theme == theme%}
+     <a href="{{task.get_task_url}}">{{task.name}}</a> 
+     {% for file in files %}
+     {% if file.task == task %}
+     <p style="font-size:12px">Сдано</p>
+     {% else %}
+     <p style="font-size:12px">Назначено</p>
+     {% endif %}
+     {% endfor %}
+     {% if task.deadline %}
+     <p style="font-size:12px">Срок здачи: {{task.deadline}}</p>
+      {% else %}
+      <p style="font-size:12px">Без срока здачи</p>
+     {% endif %}
+     {% endif %}
+   </div>
+   {% endfor %}
+    {% endfor %}
+  </div>
+
+
+ {% endblock content %}

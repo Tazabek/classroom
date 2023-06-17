@@ -1,0 +1,95 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h2> {{cource.name}} </h2>
+</div>
+<div style='margin-left:50px; margin-top:50px'>
+    <ul class="nav nav-pills">
+     <li class="nav-item">
+       <a class="nav-link {{nav1}}" href="{{cource.get_stream_url}}">Лента</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav2}}" href="{{cource.get_tasks_url}}">Задания</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav3}}" href="{{cource.users_url}}">Пользователи</a>
+     </li>
+     {% if user in cource.teachers.all %}
+     <li class="nav-item">
+         <a class="nav-link {{nav4}}" href="{{cource.points_url}}">Оценки</a>
+       </li>
+       {% endif %}
+   </ul>
+ </div>
+ 
+<div class="card" style="margin:50px">
+    <h3>Преподаватели</h3>
+    {% if user in cource.teachers.all %}
+    <div style="margin:30px">
+      <a href="{{cource.add_teacher_url}}"> Добавить Преподавателя </a>
+     </div>
+     {% endif %}
+    {% for teacher in teachers %}
+    <div class="card-body">
+      <p style="font-size:25px"> {{teacher.username}} {% if user == cource.owner %} {% if teacher != cource.owner %} <button type="button" style="float:right; margin-right:50px" data-bs-toggle="modal" data-bs-target="#{{teacher.username}}" class="btn btn-danger">удалить</button> {% endif %} {% endif %} {% if teacher == cource.owner %}<button type="button" style="float:right; margin-right:50px" class="btn btn-info">Владелец</button>{% endif %}</p> 
+    </div>
+    <div class="modal" tabindex="-1" id="{{teacher.username}}" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Внимание</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Удалить пользователя {{teacher.username}} ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">отменить</button>
+            <form method="post"> {% csrf_token %} <button type="submit" name="button" value="{{teacher.username}}" class="btn btn-primary">удалить</button> </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+  <div class="card" style="margin:50px">
+    <h3>Студенты</h3>
+    {% if user in cource.teachers.all %}
+    <div style="margin:30px">
+      <a href="{{cource.add_student_url}}"> Добавить студента </a>
+     </div>
+     {%endif%}
+        {% for student in students %}
+    <div class="card-body">
+    <p style="font-size:25px"> {{student.username}} {% if user == cource.owner %}  <button type="button" name="button" value="student.username" style="float:right; margin-right:50px" data-bs-toggle="modal" data-bs-target="#{{student.username}}" class="btn btn-danger">удалить</button>{% endif %}</p> 
+    {% if user in cource.teachers.all %}
+    <a href="{{student.room_url}}"> Личный кабинет с {{student.username}}</a>
+    {% endif %}
+  </div>
+    <div class="modal" tabindex="-1" id="{{student.username}}" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Внимание</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Удалить пользователя {{student.username}} ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">отменить</button>
+            <form method="post"> {% csrf_token %} <button type="submit" name="button" value="{{student.username}}" class="btn btn-primary">удалить</button> </form> 
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+  {% endblock content%}

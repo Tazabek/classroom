@@ -1,0 +1,35 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h5> Изменить задание {{task.name}}</h5>
+</div>
+<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+ <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput" class="form-label">Название</label>
+    {{form.name}}
+  </div>
+  <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput2" class="form-label">инструкция</label>
+    {{form.instruction}}
+  </div>
+  <div class="mb-3" style="margin:50px">
+  <label for="file">Upload File:</label>
+  {{form.file}}
+  </div>
+</div>
+  <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput2" class="form-label">баллы</label>
+    {{form.points}}
+  </div>
+  <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput2" class="form-label" placeholder="без срока здачи">Срок сдачи</label>
+    {{ form.deadline }}
+  </div>
+  <button class="btn btn-primary" type="submit" value="Upload" style="margin-left:50px">Сохранить</button>
+
+</form>
+
+{% endblock content %}

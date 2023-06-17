@@ -1,0 +1,116 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h5> {{cource.name}} </h5>
+</div>
+{% if user in cource.teachers.all %}
+<div style="margin:50px">
+  <h5> Код курса: </h5>
+  <p> {{cource.code}} </p>
+  </div>
+  {% endif %}
+<div style='margin-left:50px; margin-top:50px'>
+    <ul class="nav nav-pills">
+     <li class="nav-item">
+       <a class="nav-link {{nav1}}" href="{{cource.get_stream_url}}">Лента</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav2}}" href="{{cource.get_tasks_url}}">Задания</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav3}}" href="{{cource.users_url}}">Пользователи</a>
+     </li>
+     {% if user in cource.teachers.all %}
+     <li class="nav-item">
+         <a class="nav-link {{nav4}}" href="{{cource.points_url}}">Оценки</a>
+       </li>
+       {% endif %}
+       {% if user == cource.owner %}
+      <li style="float:right; margin-left:700px" class="nav-item">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn btn-danger">удалить курс</button>
+      </li>
+      {% else %}
+      <li style="float:right; margin-left:700px" class="nav-item">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#leaveModal" class="btn btn-danger">покинуть курс</button>
+      </li>
+      {% endif %}
+   </ul>
+ </div>
+ <form method="post" required> {% csrf_token %}
+<div class="mb-3" style="margin:50px">
+  <label for="exampleFormControlTextarea1" class="form-label">Обратитесь к курсу</label>
+  <textarea class="form-control" name="text" id="exampleFormControlTextarea1" rows="2" required></textarea>
+  <button class="btn btn-primary" type="submit" >отправить</button>
+</div>
+</form>
+ {% for stream in streams %}
+ <div class="card" style="margin:50px">
+  <div class="card-body">
+    {%if stream.is_group_message%}
+    <h6>{{stream.user.username}}</h6>
+    {% endif %}
+    <p>{{stream.text}}</p> 
+    <p style="font-size:12px">{{stream.date}}</p>
+  </div>
+  {%for stream_comment in stream_comments%}
+  {% if stream_comment.stream == stream %}
+  <div class="card-body">
+    <h6>{{stream_comment.user.username}}</h6>
+    <p>{{stream_comment.text}}</p> 
+    <p style="font-size:12px">{{stream_comment.date}}</p>
+  </div>
+  {% endif %}
+  {% endfor %}
+  {%if stream.is_group_message%}
+  <form method="post" action="{%url 'add-stream-comment'%}"> {% csrf_token %}
+    <div class="mb-3">
+      <input type="hidden" name="hidden" value="{{stream.pk}}">
+      <label for="exampleFormControlTextarea1" class="form-label">Добавить коментарий</label>
+      <textarea class="form-control" name="text" id="exampleFormControlTextarea1" rows="1" required></textarea>
+      <button class="btn btn-primary" type="submit" >добавить</button>
+    </div>
+    </form>
+    {% endif %}
+</div>
+{% endfor %}
+
+<div class="modal" tabindex="-1" id="leaveModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Внимание</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Покинуть курс {{cource.name}} ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">отменить</button>
+        <a href="{{cource.leave_cource}}"> <button type="button" class="btn btn-primary">покинуть</button> </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="deleteModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Внимание</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Удалить курс {{cource.name}} ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">отменить</button>
+        <a href="{{cource.delete_cource_url}}"> <button type="button" class="btn btn-primary">удалить</button> </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ {% endblock content %}

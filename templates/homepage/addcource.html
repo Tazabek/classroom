@@ -1,0 +1,37 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <h5> Classroom</h5>
+</div>
+<div style='margin-left:50px; margin-top:50px'>
+    <ul class="nav nav-pills">
+     <li class="nav-item">
+       <a class="nav-link {{nav1}}" href="{%url 'allcources'%}">Все курсы</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav2}}" href="{%url 'teacher'%}">Курсы, которые я преподаю</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link {{nav3}}" href="{%url 'student'%}">Курсы, слушателем которых я являюсь</a>
+     </li>
+     <li class="nav-item">
+         <a class="nav-link {{nav4}}" href="{%url 'addcource'%}">Создать курс</a>
+       </li>
+       <li class="nav-item">
+        <a class="nav-link {{nav5}}" href="{%url 'join-cource'%}">Присоединиться к курсу</a>
+      </li>
+   </ul>
+ </div>
+<form method="post"> {% csrf_token %}
+ <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput" class="form-label">Название курса</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" name="name" required>
+  </div>
+  <div class="mb-3" style="margin:50px">
+    <label for="formGroupExampleInput2" class="form-label">Предмет курса</label>
+    <input type="text" class="form-control" id="formGroupExampleInput2" name="subject" required>
+  </div>
+  <button class="btn btn-primary" type="submit" style="margin-left:50px">Создать</button>
+
+</form>
+{% endblock content %}

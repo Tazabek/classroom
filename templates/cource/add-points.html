@@ -1,0 +1,36 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+
+<div style="margin:50px">
+    <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+   </div>
+
+ <div style="margin:50px">
+    <h5> {{task.name}} </h5>
+    <p> сдано {{works}} из {{all_students}} </p>
+  </div>
+
+  <form method="post"> {% csrf_token %}
+    {% for student in students %}
+    <div class="mb-3" style="margin:50px">
+        <label for="formGroupExampleInput" class="form-label">{{student.username}}</label>
+        {% if task.points %}
+        <input type="number" placeholder="баллы __{{task.points}}" class="form-control" id="formGroupExampleInput" name="{{student.username}}" required>
+        {% endif %}
+      </div>
+      {% if files %}
+      {% for file in files %}
+      {%if file.student == student%}
+      Работа студента: <a href="{{file.file.url}}">file</a><br>
+      {% else %} нет работы студента <br>
+      {% endif %}
+      <a href="{{file.student.room_url}}"> Личный кабинет с {{student.username}}</a>
+      {% endfor %}
+      {% else %} нет работы студента <br>
+      {% endif %}
+      {% endfor %} <br>
+      {% if task.points %}
+      <button class="btn btn-primary" type="submit" value="Upload" style="margin:50px">Добавить баллы</button>
+      {% endif %}
+    </form>
+{% endblock content %}

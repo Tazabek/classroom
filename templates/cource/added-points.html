@@ -1,0 +1,38 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+
+<div style="margin:50px">
+    <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+   </div>
+
+ <div style="margin:50px">
+    <h5> {{task.name}} </h5>
+    <p> сдано {{works}} из {{all_students}} </p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+     Баллы
+    </div>
+    {% for point in points %}
+    <div class="card-body">
+      <h5 class="card-title">{{point.student.username}}</h5>
+      <p class="card-text">Баллы {{point.points}} из {{task.points}}</p> <br>
+      {% if not files %}
+      Нет работы студента
+      {% endif %}
+      {% for file in files%}
+      {% if file.student == point.student %}
+      Работа студента: <a href="{{ file.file.url }}">file</a><br>
+      <a href="{{point.update_point}}" style="marign-left:100px" class="btn btn-primary">изменить баллы</a>
+      {% else %} Нет работы студента
+      {% endif %}
+      {% endfor %}
+      <a href="{{point.student.room_url}}" style="marign-left:100px" class="btn btn-primary">Личный кабинет с {{point.student.username}}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  
+
+  {% endblock content%}

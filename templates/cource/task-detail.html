@@ -1,0 +1,87 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+
+  <div style="margin:50px">
+    <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+   </div>
+  <div style="margin:50px">
+    <h5> {{task.name}} </h5>
+  </div>
+  <br>
+
+{% if user in task.cource.students.all %}
+  <div style="margin-left: 50px">
+  {% if task.points and not point %}
+  <h6> У вас пока нет оценки </h6>
+  {% elif task.points and point %}
+  <h5> Ваша оценка: {{point.points}} из {{task.points}} </h5>
+    {% endif %}
+  </div>
+  {% endif %}
+
+<div style="margin:50px">
+   инструкция: {{task.instruction}} <br>
+
+  {% if task.points %}
+  баллы : {{task.points}}
+  {% else %}
+  без оценок
+  {% endif %}
+
+  <br>
+  {% if task.file %}
+  файл : <a href="{{task.file.url}}">file</a>
+  {% endif %}
+
+  <br>
+  added at: {{task.added_at}}
+
+
+  <br>
+  {% if task.deadline %}
+  срок здачи : {{task.deadline}}
+  {% else %}
+  без срока здачи
+  {% endif %}
+</div>
+
+{% if file and user in task.cource.students.all %}
+Мой файл: <a href="{{file.file.url}}">file</a><br>
+<a class="btn btn-primary" href="{{file.update_file}}" role="button">Изменить файл</a>
+{% elif not file and user in task.cource.students.all %}
+<a class="btn btn-primary" href="{{task.add_file}}" role="button">Добавить работу</a>
+{% elif user in task.cource.teachers.all %}
+<a class="btn btn-primary" href="{{task.task_points_url}}" role="button">Работы студентов</a>
+<a class="btn btn-primary" href="{{task.change_task}}" role="button">Изменить задание</a>
+{% endif %}
+{% if user in task.cource.students.all %}
+<a href="{{task.added_by.teacher_room_url}}"> Личный кабинет с {{task.added_by.username}}</a>
+{% endif %}
+
+{% for message in messages%}
+  {{message}}
+  {% endfor %} <br>
+{% if comments %}
+
+
+  <div style="margin:50px">
+    <h3> Коментарии </h3>
+        {% for comment in comments %}
+        <div>
+           <h5> {{comment.user.username}} </h5> 
+            <p>{{comment.text}}</p>
+        </div>
+        {% endfor %}
+  </div>
+  {% endif %}
+
+  <form method="post" style="margin:50px"> {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">Добавить коментарий</label>
+      <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="1" required></textarea>
+      <button class="btn btn-primary" type="submit" >добавить</button>
+    </div>
+    </form>
+
+
+{% endblock content%}

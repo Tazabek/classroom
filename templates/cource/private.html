@@ -1,0 +1,26 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<div style="margin:50px">
+  <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+ </div>
+<div style="margin:50px">
+  <h5> Личный кабинет с {{user1.username}} </h5>
+</div>
+
+  {%for message in messages%}
+  <div  style="margin-left:50px" class="card-body">
+    <h6>{{message.sent_by.username}}</h6>
+    <p>{{message.message}}</p> 
+    <p style="font-size:12px">{{message.date}}</p>
+  </div>
+  {% endfor %}
+
+<form method="post" required> {% csrf_token %}
+    <div class="mb-3" style="margin:50px">
+      <label for="exampleFormControlTextarea1" class="form-label">Написать сообщение</label>
+      <textarea class="form-control" name="text" id="exampleFormControlTextarea1" rows="2" required></textarea>
+      <button class="btn btn-primary" type="submit" >отправить</button>
+    </div>
+    </form>
+
+{% endblock content%}

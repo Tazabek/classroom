@@ -1,0 +1,37 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<a href="{% url 'logout' %}" style="margin:50px">Logout</a> <br>
+<p style="margin-left:50px"> {{user.username}} </p>
+<div style="margin:50px">
+ <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+</div>
+    <div style='margin-left:50px; margin-top:50px'>
+       <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link {{nav1}}" href="{%url 'allcources'%}">Все курсы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{nav2}}" href="{%url 'teacher'%}">Курсы, которые я преподаю</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{nav3}}" href="{%url 'student'%}">Курсы, слушателем которых я являюсь</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{nav4}}" href="{%url 'addcource'%}">Создать курс</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{nav5}}" href="{%url 'join-cource'%}">Присоединиться к курсу</a>
+          </li>
+      </ul>
+    </div>
+    {%for cource in cources%}
+      <div class="card" style="width: 18rem; margin-top:80px; margin-left:50px; float:left">
+        <div class="card-body">
+          <h5 class="card-title">{{cource.name}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{cource.subject}}</h6>
+          <a href="{{cource.get_stream_url}}" class="card-link">перейти</a>
+        </div>
+      </div>
+    {%endfor%}
+
+{% endblock content %}

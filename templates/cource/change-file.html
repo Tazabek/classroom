@@ -1,0 +1,19 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+
+<div style="margin:50px">
+    <a href="{% url 'allcources'%}"> <h5> Classroom</h5> </a>
+   </div>
+
+ <div style="margin:50px">
+    <h5> {{task.name}} </h5>
+  </div>
+
+<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+  <div class="mb-3">
+    <label for="file" class="form-label">Выберите файл</label>
+    {{form.file}}
+  </div>
+  <button class="btn btn-primary" type="submit" value="Upload" style="margin-left:50px">Сохранить</button>
+</form>
+{% endblock content%}
